@@ -30,6 +30,16 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         }
-        return super.onOptionsItemSelected(item);
+
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.admin_login:
+                Intent intent = new Intent(this, AdminLoginActivity.class);
+                startActivity(intent);
+                return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+        }
     }
 }
