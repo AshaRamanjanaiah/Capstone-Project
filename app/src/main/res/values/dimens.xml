@@ -5,4 +5,10 @@
     <!-- login -->
     <dimen name="login_margin_top">20dp</dimen>
 
+    <!-- update timtings -->
+    <dimen name="layout_margin">16dp</dimen>
+    <dimen name="title_textsize">24dp</dimen>
+    <dimen name="title_paddingBottom">10dp</dimen>
+    <dimen name="divider_line_height">2dp</dimen>
+
 </resources>
