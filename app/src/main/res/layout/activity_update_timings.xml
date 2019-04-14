@@ -23,13 +23,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:background="@drawable/spinner_border"
                 ></Spinner>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_day"
-                app:errorEnabled="true">
+                app:errorEnabled="true"
+                android:paddingTop="@dimen/layout_margin">
 
                 <android.support.design.widget.TextInputEditText
                     android:layout_width="match_parent"

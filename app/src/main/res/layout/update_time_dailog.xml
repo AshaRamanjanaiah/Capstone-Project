@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-</LinearLayout>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_day"
+        android:id="@+id/dailog_update_day" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_opening_time"
+        android:id="@+id/dailog_update_opntime"
+        android:layout_below="@+id/dailog_update_day"/>
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_closing_time"
+        android:id="@+id/dailog_update_clstime"
+        android:layout_below="@+id/dailog_update_opntime"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/dailog_update_clstime">
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:id="@+id/dailog_update_button"
+        android:layout_below="@+id/dailog_update_clstime"
+        android:text="@string/update_temple_time"/>
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:id="@+id/dailog_update_cancel"
+        android:layout_below="@+id/dailog_update_clstime"
+        android:layout_toRightOf="@+id/dailog_update_button"
+        android:text="@string/cancel"/>
+    </LinearLayout>
+
+</RelativeLayout>

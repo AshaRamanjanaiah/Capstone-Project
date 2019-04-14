@@ -1,5 +1,6 @@
 package com.example.android.hindutemple.utils;
 
+import android.support.design.widget.TextInputLayout;
 import android.util.Patterns;
 import android.view.View;
 
@@ -17,5 +18,44 @@ public class Constants {
                     "(?=\\S+$)" +           //no white spaces
                     ".{6,}" +               //at least 6 characters
                     "$");
+
+    public static boolean validateEmail(TextInputLayout view, String emailInput){
+
+        if(emailInput.isEmpty()){
+            view.setError("Email field can't be empty");
+            return false;
+        }else if(!Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()){
+            view.setError("Enter a valid Email address");
+            return false;
+        }else {
+            view.setError(null);
+            return true;
+        }
+
+    }
+
+    public static boolean validatePassword(TextInputLayout view, String passwordInput){
+
+        if(passwordInput.isEmpty()){
+            view.setError("Password field can't be empty");
+            return false;
+        }else if(!Constants.PASSWORD_PATTERN.matcher(passwordInput).matches()){
+            view.setError("Password should contain atleast 6 characters");
+            return false;
+        }else {
+            view.setError(null);
+            return true;
+        }
+    }
+
+    public static boolean validateField(String name, TextInputLayout view, String value) {
+        if (value.isEmpty()) {
+            view.setError(name +" field can't be empty");
+            return false;
+        }else {
+            view.setError(null);
+            return true;
+        }
+    }
 
 }

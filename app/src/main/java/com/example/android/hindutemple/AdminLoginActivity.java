@@ -46,39 +46,6 @@ public class AdminLoginActivity extends AppCompatActivity {
 
     }
 
-    private boolean validateEmail(){
-
-        emailInput = textInputEmail.getEditText().getText().toString().trim();
-        if(emailInput.isEmpty()){
-            textInputEmail.setError("Email field can't be empty");
-            return false;
-        }else if(!Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()){
-            textInputEmail.setError("Enter a valid Email address");
-            return false;
-        }else {
-            textInputEmail.setError(null);
-            return true;
-        }
-
-    }
-
-    private boolean validatePassword(){
-        passwordInput = textInputPassword.getEditText().getText().toString().trim();
-
-        if(passwordInput.isEmpty()){
-            textInputPassword.setError("Password field can't be empty");
-            return false;
-        }else if(!Constants.PASSWORD_PATTERN.matcher(passwordInput).matches()){
-            textInputPassword.setError("Password should contain atleast 6 characters");
-            return false;
-        }else {
-            textInputPassword.setError(null);
-            return true;
-        }
-    }
-
-
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         emailInput = textInputEmail.getEditText().getText().toString().trim();
@@ -95,7 +62,9 @@ public class AdminLoginActivity extends AppCompatActivity {
     }
 
     public void loginUser(View view) {
-        if(!validateEmail() | !validatePassword()){
+        emailInput = textInputEmail.getEditText().getText().toString().trim();
+        passwordInput = textInputPassword.getEditText().getText().toString().trim();
+        if(!Constants.validateEmail(textInputEmail, emailInput) | !Constants.validatePassword(textInputPassword, passwordInput)){
             return;
         }
 

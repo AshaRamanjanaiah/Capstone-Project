@@ -9,15 +9,18 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.android.hindutemple.model.Temples;
 import com.example.android.hindutemple.model.Timings;
+import com.example.android.hindutemple.utils.Constants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -35,6 +38,10 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
 
     private static final String TAG = UpdateTimingsActivity.class.getSimpleName();
 
+    private static final String DAY = "Day";
+    private static final String OPENING_TIME = "Opening Time";
+    private static final String CLOSING_TIME = "Closing Time";
+
     private Spinner mSpinnerDisplayTemples;
     private TextInputLayout mTextInputLayoutDay;
     private TextInputLayout mTextInputLayoutOpenTime;
@@ -47,6 +54,7 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
     FirebaseAuth mAuth;
     FirebaseUser mUser;
     String mTempleId;
+    FirebaseDatabase firebaseDatabase;
 
     List<Temples> templeList = new ArrayList<>();
     ArrayAdapter<Temples> adapter;
@@ -57,6 +65,11 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_timings);
+
+        if(savedInstanceState == null){
+            firebaseDatabase = FirebaseDatabase.getInstance();
+            firebaseDatabase.setPersistenceEnabled(true);
+        }
 
         mSpinnerDisplayTemples = (Spinner) findViewById(R.id.spinner_templelist);
         mTextInputLayoutDay = (TextInputLayout) findViewById(R.id.editText_day);
@@ -70,11 +83,10 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
                 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerviewTimingsList.setLayoutManager(layoutManager);
         mRecyclerviewTimingsList.setNestedScrollingEnabled(false);
-        timingsListAdapter = new TimingsAdapter(timingsList, this);
-        mRecyclerviewTimingsList.setAdapter(timingsListAdapter);
 
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
+
         databaseTemples = FirebaseDatabase.getInstance().getReference("temples").child(mUser.getUid());
 
         adapter =  new ArrayAdapter<>(this,
@@ -100,7 +112,7 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e(TAG , "Network error, can not load data");
+                Log.e(TAG , "Network error, can not load temple data");
             }
         });
 
@@ -123,12 +135,14 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
                     timingsList.add(timings);
                 }
 
-                mRecyclerviewTimingsList.setAdapter(new TimingsAdapter(timingsList, UpdateTimingsActivity.this));
+                timingsListAdapter = new TimingsAdapter(timingsList, UpdateTimingsActivity.this);
+                mRecyclerviewTimingsList.setAdapter(timingsListAdapter);
+                timingsListAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.e(TAG , "Network error, can not load timings data");
             }
         });
     }
@@ -138,46 +152,143 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
 
     }
 
+    //public boolean validateDay
+
     public void saveTimings(View view){
 
         String day = mTextInputLayoutDay.getEditText().getText().toString().trim();
         String openingTime = mTextInputLayoutOpenTime.getEditText().getText().toString().trim();
         String closingTime = mTextInputLayoutCloseTime.getEditText().getText().toString().trim();
 
+        if(!Constants.validateField(DAY, mTextInputLayoutDay, day ) |
+                !Constants.validateField(OPENING_TIME, mTextInputLayoutOpenTime, openingTime)
+        | !Constants.validateField(CLOSING_TIME , mTextInputLayoutCloseTime, closingTime)){
+            return;
+        }
+
         String id = databaseTimings.push().getKey();
 
-        Timings timings = new Timings(id, day, openingTime, closingTime);
+        if(id != null){
 
-        databaseTimings.child(id).setValue(timings);
+            Timings timings = new Timings(id, day, openingTime, closingTime);
+
+            databaseTimings.child(id).setValue(timings);
+
+        }
 
         Toast.makeText(this, "Timings saved Successfully", Toast.LENGTH_LONG).show();
     }
 
-    private void showUpdateDialog(){
+    private void showUpdateDialog(final String id, final String day, final String openTime, final String closeTime){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.update_day_and_time);
-        builder.setPositiveButton(R.string.update_temple_time, new DialogInterface.OnClickListener() {
+
+        LayoutInflater inflater =getLayoutInflater();
+
+        View dailogView = inflater.inflate(R.layout.update_time_dailog, null);
+
+        final EditText editTextDay = (EditText) dailogView.findViewById(R.id.dailog_update_day);
+        final EditText editTextOpneTime = (EditText) dailogView.findViewById(R.id.dailog_update_opntime);
+        final EditText editTextCloseTime = (EditText) dailogView.findViewById(R.id.dailog_update_clstime);
+
+        Button buttonUpdate = (Button) dailogView.findViewById(R.id.dailog_update_button);
+        Button buttonCancel = (Button) dailogView.findViewById(R.id.dailog_update_cancel);
+
+        editTextDay.setText(day);
+        editTextOpneTime.setText(openTime);
+        editTextCloseTime.setText(closeTime);
+
+        builder.setView(dailogView);
+
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+
+        buttonUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String weekDay = editTextDay.getText().toString().trim();
+                String timeOpen = editTextOpneTime.getText().toString().trim();
+                String timeClose = editTextCloseTime.getText().toString().trim();
+
+                updateTimingsInfo(id, weekDay, timeOpen, timeClose);
+                alertDialog.dismiss();
+            }
+        });
+    }
+
+    @Override
+    public void onEdit(int itemIndex) {
+        String day = timingsList.get(itemIndex).getTimingsDay();
+        String openTime = timingsList.get(itemIndex).getTimingsOpen();
+        String closeTime = timingsList.get(itemIndex).getTimingsClose();
+        String id = timingsList.get(itemIndex).getTimingsId();
+        showUpdateDialog(id, day, openTime, closeTime);
+    }
+
+    @Override
+    public void onDelete(int clickedItemIndex) {
+        String id = timingsList.get(clickedItemIndex).getTimingsId();
+        
+        showDeleteDailog(id);
+    }
+
+    private void showDeleteDailog(final String timeId) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.delete_message);
+
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
+                databaseTimings.child(timeId).removeValue();
+                dialog.dismiss();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User cancelled the dialog
+                dialog.dismiss();
             }
         });
-        final AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private boolean updateTimingsInfo(String id, String day, String openTime, String closetime){
+
+        Timings temple = new Timings(id, day, openTime, closetime);
+
+        databaseTimings.child(id).setValue(temple);
+
+        return true;
     }
 
     @Override
-    public void onEdit(int clickedItemIndex) {
-        showUpdateDialog();
-        Toast.makeText(this, "Edit clicked", Toast.LENGTH_LONG).show();
+    protected void onSaveInstanceState(Bundle outState) {
+
+        String day = mTextInputLayoutDay.getEditText().getText().toString().trim();
+        String openingTime = mTextInputLayoutOpenTime.getEditText().getText().toString().trim();
+        String closingTime = mTextInputLayoutCloseTime.getEditText().getText().toString().trim();
+
+        outState.putString(DAY, day);
+        outState.putString(OPENING_TIME, openingTime);
+        outState.putString(CLOSING_TIME, closingTime);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
-    public void onDelete(int clickedItemIndex) {
-        Toast.makeText(this, "delete clicked", Toast.LENGTH_LONG).show();
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        mTextInputLayoutDay.getEditText().setText(savedInstanceState.getString(DAY));
+        mTextInputLayoutOpenTime.getEditText().setText(savedInstanceState.getString(OPENING_TIME));
+        mTextInputLayoutCloseTime.getEditText().setText(savedInstanceState.getString(CLOSING_TIME));
     }
 }

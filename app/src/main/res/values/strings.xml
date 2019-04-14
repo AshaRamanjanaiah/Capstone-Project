@@ -17,4 +17,8 @@
     <string name="delete">Delete</string>
     <string name="update_day_and_time">Update Day and Time</string>
     <string name="cancel">Cancel</string>
+    <string name="delete_message">Delete this item?</string>
+    <string name="day">Day</string>
+    <string name="open_time">Open Time</string>
+    <string name="close_time">Close Time</string>
 </resources>

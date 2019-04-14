@@ -96,6 +96,8 @@ public class TimingsAdapter extends RecyclerView.Adapter<TimingsAdapter.TimingsV
                 case R.id.imageView_delete:
                     itemClickListener.onDelete(clickedPosition);
                     break;
+                    default:
+                        break;
 
             }
         }
