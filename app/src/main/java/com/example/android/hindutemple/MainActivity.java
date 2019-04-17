@@ -25,12 +25,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId() == R.id.admin_login){
-            Intent intent = new Intent(this, AdminLoginActivity.class);
-            startActivity(intent);
-            return true;
-        }
-
         int id = item.getItemId();
 
         switch (id){

@@ -2,10 +2,10 @@ package com.example.android.hindutemple.model;
 
 public class Temples {
 
-    String templeId;
-    String templeName;
-    String templeLocation;
-    String templeImageUri;
+    private String templeId;
+    private String templeName;
+    private String templeLocation;
+    private String templeImageUri;
 
     public Temples(){
 

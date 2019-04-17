@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">HinduTemple</string>
     <string name="admin_login">Admin Login</string>
+    <string name="add_events">Add Events</string>
 
     <!-- login Activity -->
     <string name="enter_email">Email</string>
@@ -21,4 +22,18 @@
     <string name="day">Day</string>
     <string name="open_time">Open Time</string>
     <string name="close_time">Close Time</string>
+    <string name="email_field_cant_be_empty">Email field can not be empty</string>
+    <string name="enter_valid_email">Enter a valid Email address</string>
+    <string name="password_can_not_be_empty">"Password field can not be empty"</string>
+    <string name="password_should_contain_6_chars">Password should contain atleast 6 characters</string>
+    <string name="field_can_not_be_empty">field can not be empty</string>
+
+    <!-- Add and Update events Activity -->
+
+    <string name="enter_event">Enter Event Name</string>
+    <string name="enter_start_date">Enter Event Date</string>
+    <string name="enter_time">Enter Event Time</string>
+    <string name="add_event">Add</string>
+    <string name="update_event_date_time">Update Event Date and Time</string>
+
 </resources>

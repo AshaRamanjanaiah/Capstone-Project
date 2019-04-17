@@ -1,6 +1,7 @@
 package com.example.android.hindutemple;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
@@ -10,6 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -38,15 +42,14 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
 
     private static final String TAG = UpdateTimingsActivity.class.getSimpleName();
 
-    private static final String DAY = "Day";
-    private static final String OPENING_TIME = "Opening Time";
-    private static final String CLOSING_TIME = "Closing Time";
+    private static final String DAY = "day";
+    private static final String OPENING_TIME = "opening_time";
+    private static final String CLOSING_TIME = "closing_time";
 
     private Spinner mSpinnerDisplayTemples;
     private TextInputLayout mTextInputLayoutDay;
     private TextInputLayout mTextInputLayoutOpenTime;
     private TextInputLayout mTextInputLayoutCloseTime;
-    private Button mButtonUpdateTime;
     private RecyclerView mRecyclerviewTimingsList;
 
     DatabaseReference databaseTimings;
@@ -75,7 +78,6 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
         mTextInputLayoutDay = (TextInputLayout) findViewById(R.id.editText_day);
         mTextInputLayoutOpenTime = (TextInputLayout) findViewById(R.id.editText_open_time);
         mTextInputLayoutCloseTime = (TextInputLayout) findViewById(R.id.editText_close_time);
-        mButtonUpdateTime = (Button) findViewById(R.id.button_add_time);
 
         mRecyclerviewTimingsList = (RecyclerView) findViewById(R.id.recyclerview_timings);
         mRecyclerviewTimingsList.setHasFixedSize(true);
@@ -119,6 +121,27 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.event_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.add_events:
+                Intent intent = new Intent(this, AddAndUpdateEvents.class);
+                startActivity(intent);
+                return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -152,8 +175,6 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
 
     }
 
-    //public boolean validateDay
-
     public void saveTimings(View view){
 
         String day = mTextInputLayoutDay.getEditText().getText().toString().trim();
@@ -175,8 +196,6 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
             databaseTimings.child(id).setValue(timings);
 
         }
-
-        Toast.makeText(this, "Timings saved Successfully", Toast.LENGTH_LONG).show();
     }
 
     private void showUpdateDialog(final String id, final String day, final String openTime, final String closeTime){
