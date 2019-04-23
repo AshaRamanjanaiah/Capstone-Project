@@ -1,7 +1,6 @@
 package com.example.android.hindutemple;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
@@ -21,11 +20,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.example.android.hindutemple.model.Events;
 import com.example.android.hindutemple.model.Temples;
-import com.example.android.hindutemple.model.Timings;
 import com.example.android.hindutemple.utils.Constants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,6 +36,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import networkutils.FirebaseDatabaseUtils;
+
 public class AddAndUpdateEvents extends AppCompatActivity implements AdapterView.OnItemSelectedListener, EventsAdapter.ItemClickListener {
 
     private static final String TAG = AddAndUpdateEvents.class.getSimpleName();
@@ -46,48 +45,39 @@ public class AddAndUpdateEvents extends AppCompatActivity implements AdapterView
     private static final String EVENT_DATE = "event_date";
     private static final String EVENT_TIME = "event_time";
 
-    private DatePicker datePicker;
     private Calendar calendar;
-    private int year, month, day, hour, minute;
 
-    TextInputLayout mInputStartDate;
-    TextInputLayout mInputTime;
-    private Spinner mSpinnerDisplayTempleEvents;
+    private TextInputLayout mInputStartDate;
+    private TextInputLayout mInputTime;
     private TextInputLayout mTextInputLayoutEventName;
     private RecyclerView mRecyclerviewEventsList;
 
-    DatabaseReference databaseEvents;
-    DatabaseReference databaseTemples;
-    FirebaseAuth mAuth;
-    FirebaseUser mUser;
-    String mTempleId;
-    FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseEvents;
+    private DatabaseReference databaseTemples;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
+    private String mTempleId;
 
-    List<Temples> templeList = new ArrayList<>();
-    ArrayAdapter<Temples> adapter;
-    List<Events> eventsList = new ArrayList<>();
-    EventsAdapter eventsListAdapter;
+    private List<Temples> templeList = new ArrayList<>();
+    private ArrayAdapter<Temples> adapter;
+    private List<Events> eventsList = new ArrayList<>();
+    private EventsAdapter eventsListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_and_update_events);
 
-        /*if(savedInstanceState == null){
-            firebaseDatabase = FirebaseDatabase.getInstance();
-            firebaseDatabase.setPersistenceEnabled(true);
-        }*/
-
         calendar = Calendar.getInstance();
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
 
-        databaseTemples = FirebaseDatabase.getInstance().getReference("temples").child(mUser.getUid());
+        databaseTemples = FirebaseDatabaseUtils.getDatabase().getReference("temples").child(mUser.getUid());
 
-        mInputStartDate = (TextInputLayout) findViewById(R.id.editText_event_date);
-        mInputTime = (TextInputLayout) findViewById(R.id.editText_event_time);
-        mSpinnerDisplayTempleEvents = (Spinner) findViewById(R.id.spinner_templelist_events);
-        mTextInputLayoutEventName = (TextInputLayout) findViewById(R.id.editText_event_name);
+        mInputStartDate = findViewById(R.id.editText_event_date);
+        mInputTime = findViewById(R.id.editText_event_time);
+        Spinner mSpinnerDisplayTempleEvents = findViewById(R.id.spinner_templelist_events);
+        mTextInputLayoutEventName = findViewById(R.id.editText_event_name);
         adapter =  new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, templeList);
         // Specify the layout to use when the list of choices appears
@@ -96,7 +86,7 @@ public class AddAndUpdateEvents extends AppCompatActivity implements AdapterView
         mSpinnerDisplayTempleEvents.setAdapter(adapter);
         mSpinnerDisplayTempleEvents.setSelection(0);
         mSpinnerDisplayTempleEvents.setOnItemSelectedListener(this);
-        mRecyclerviewEventsList = (RecyclerView) findViewById(R.id.recyclerview_events);
+        mRecyclerviewEventsList = findViewById(R.id.recyclerview_events);
         mRecyclerviewEventsList.setHasFixedSize(true);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -129,9 +119,9 @@ public class AddAndUpdateEvents extends AppCompatActivity implements AdapterView
     }
 
     public void setDate(View view){
-        year = calendar.get(Calendar.YEAR);
-        month = calendar.get(Calendar.MONTH);
-        day = calendar.get(Calendar.DAY_OF_MONTH);
+        int year = calendar.get(Calendar.YEAR);
+        final int month = calendar.get(Calendar.MONTH);
+        final int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 new DatePickerDialog.OnDateSetListener() {
@@ -148,8 +138,8 @@ public class AddAndUpdateEvents extends AppCompatActivity implements AdapterView
     }
 
     public void setTime(View view){
-        hour = calendar.get(Calendar.HOUR_OF_DAY);
-        minute = calendar.get(Calendar.MINUTE);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
 
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
@@ -190,8 +180,11 @@ public class AddAndUpdateEvents extends AppCompatActivity implements AdapterView
             Events events = new Events(id, eventName, eventDate, eventTime);
 
             databaseEvents.child(id).setValue(events);
-
         }
+
+        mTextInputLayoutEventName.getEditText().setText("");
+        mInputStartDate.getEditText().setText("");
+        mInputTime.getEditText().setText("");
 
     }
 
@@ -199,7 +192,7 @@ public class AddAndUpdateEvents extends AppCompatActivity implements AdapterView
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         Temples temple = templeList.get(i);
         mTempleId = temple.getTempleId();
-        databaseEvents = FirebaseDatabase.getInstance().getReference("events").child(mTempleId);
+        databaseEvents = FirebaseDatabaseUtils.getDatabase().getReference("events").child(mTempleId);
 
         databaseEvents.addValueEventListener(new ValueEventListener() {
             @Override
@@ -244,12 +237,12 @@ public class AddAndUpdateEvents extends AppCompatActivity implements AdapterView
 
         View dailogView = inflater.inflate(R.layout.update_event_dailog, null);
 
-        final EditText editTextName = (EditText) dailogView.findViewById(R.id.update_event_name);
-        final EditText editTextDate = (EditText) dailogView.findViewById(R.id.update_event_date);
-        final EditText editTextTime = (EditText) dailogView.findViewById(R.id.update_event_time);
+        final EditText editTextName = dailogView.findViewById(R.id.update_event_name);
+        final EditText editTextDate = dailogView.findViewById(R.id.update_event_date);
+        final EditText editTextTime = dailogView.findViewById(R.id.update_event_time);
 
-        Button buttonUpdate = (Button) dailogView.findViewById(R.id.button_update);
-        Button buttonCancel = (Button) dailogView.findViewById(R.id.button_cancel);
+        Button buttonUpdate = dailogView.findViewById(R.id.button_update);
+        Button buttonCancel = dailogView.findViewById(R.id.button_cancel);
 
         editTextName.setText(eventName);
         editTextDate.setText(eventDate);
@@ -304,13 +297,11 @@ public class AddAndUpdateEvents extends AppCompatActivity implements AdapterView
         dialog.show();
     }
 
-    private boolean updateEventInfo(String id, String name, String date, String time){
+    private void updateEventInfo(String id, String name, String date, String time){
 
         Events events = new Events(id, name, date, time);
 
         databaseEvents.child(id).setValue(events);
-
-        return true;
     }
 
     @Override

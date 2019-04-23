@@ -20,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.android.hindutemple.model.Temples;
 import com.example.android.hindutemple.model.Timings;
@@ -31,12 +30,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+
+import networkutils.FirebaseDatabaseUtils;
 
 public class UpdateTimingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, TimingsAdapter.ItemClickListener {
 
@@ -46,40 +45,38 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
     private static final String OPENING_TIME = "opening_time";
     private static final String CLOSING_TIME = "closing_time";
 
-    private Spinner mSpinnerDisplayTemples;
     private TextInputLayout mTextInputLayoutDay;
     private TextInputLayout mTextInputLayoutOpenTime;
     private TextInputLayout mTextInputLayoutCloseTime;
     private RecyclerView mRecyclerviewTimingsList;
 
-    DatabaseReference databaseTimings;
-    DatabaseReference databaseTemples;
-    FirebaseAuth mAuth;
-    FirebaseUser mUser;
-    String mTempleId;
-    FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseTimings;
+    private DatabaseReference databaseTemples;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
+    private String mTempleId;
 
-    List<Temples> templeList = new ArrayList<>();
-    ArrayAdapter<Temples> adapter;
-    List<Timings> timingsList = new ArrayList<>();
-    TimingsAdapter timingsListAdapter;
+    private List<Temples> templeList = new ArrayList<>();
+    private ArrayAdapter<Temples> adapter;
+    private List<Timings> timingsList = new ArrayList<>();
+    private TimingsAdapter timingsListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_timings);
 
-        if(savedInstanceState == null){
+        /*if(savedInstanceState == null){
             firebaseDatabase = FirebaseDatabase.getInstance();
             firebaseDatabase.setPersistenceEnabled(true);
-        }
+        }*/
 
-        mSpinnerDisplayTemples = (Spinner) findViewById(R.id.spinner_templelist);
-        mTextInputLayoutDay = (TextInputLayout) findViewById(R.id.editText_day);
-        mTextInputLayoutOpenTime = (TextInputLayout) findViewById(R.id.editText_open_time);
-        mTextInputLayoutCloseTime = (TextInputLayout) findViewById(R.id.editText_close_time);
+        Spinner mSpinnerDisplayTemples = findViewById(R.id.spinner_templelist);
+        mTextInputLayoutDay = findViewById(R.id.editText_day);
+        mTextInputLayoutOpenTime = findViewById(R.id.editText_open_time);
+        mTextInputLayoutCloseTime = findViewById(R.id.editText_close_time);
 
-        mRecyclerviewTimingsList = (RecyclerView) findViewById(R.id.recyclerview_timings);
+        mRecyclerviewTimingsList = findViewById(R.id.recyclerview_timings);
         mRecyclerviewTimingsList.setHasFixedSize(true);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -89,7 +86,7 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
 
-        databaseTemples = FirebaseDatabase.getInstance().getReference("temples").child(mUser.getUid());
+        databaseTemples = FirebaseDatabaseUtils.getDatabase().getReference("temples").child(mUser.getUid());
 
         adapter =  new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, templeList);
@@ -147,7 +144,7 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         Temples temple = templeList.get(i);
         mTempleId = temple.getTempleId();
-        databaseTimings = FirebaseDatabase.getInstance().getReference("timings").child(mTempleId);
+        databaseTimings = FirebaseDatabaseUtils.getDatabase().getReference("timings").child(mTempleId);
 
         databaseTimings.addValueEventListener(new ValueEventListener() {
             @Override
@@ -196,6 +193,10 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
             databaseTimings.child(id).setValue(timings);
 
         }
+
+        mTextInputLayoutDay.getEditText().setText("");
+        mTextInputLayoutOpenTime.getEditText().setText("");
+        mTextInputLayoutCloseTime.getEditText().setText("");
     }
 
     private void showUpdateDialog(final String id, final String day, final String openTime, final String closeTime){
@@ -206,12 +207,12 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
 
         View dailogView = inflater.inflate(R.layout.update_time_dailog, null);
 
-        final EditText editTextDay = (EditText) dailogView.findViewById(R.id.dailog_update_day);
-        final EditText editTextOpneTime = (EditText) dailogView.findViewById(R.id.dailog_update_opntime);
-        final EditText editTextCloseTime = (EditText) dailogView.findViewById(R.id.dailog_update_clstime);
+        final EditText editTextDay = dailogView.findViewById(R.id.dailog_update_day);
+        final EditText editTextOpneTime = dailogView.findViewById(R.id.dailog_update_opntime);
+        final EditText editTextCloseTime = dailogView.findViewById(R.id.dailog_update_clstime);
 
-        Button buttonUpdate = (Button) dailogView.findViewById(R.id.dailog_update_button);
-        Button buttonCancel = (Button) dailogView.findViewById(R.id.dailog_update_cancel);
+        Button buttonUpdate = dailogView.findViewById(R.id.dailog_update_button);
+        Button buttonCancel = dailogView.findViewById(R.id.dailog_update_cancel);
 
         editTextDay.setText(day);
         editTextOpneTime.setText(openTime);
@@ -282,13 +283,11 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
         dialog.show();
     }
 
-    private boolean updateTimingsInfo(String id, String day, String openTime, String closetime){
+    private void updateTimingsInfo(String id, String day, String openTime, String closetime){
 
         Timings temple = new Timings(id, day, openTime, closetime);
 
         databaseTimings.child(id).setValue(temple);
-
-        return true;
     }
 
     @Override

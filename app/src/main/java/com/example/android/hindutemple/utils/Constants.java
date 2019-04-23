@@ -2,7 +2,6 @@ package com.example.android.hindutemple.utils;
 
 import android.support.design.widget.TextInputLayout;
 import android.util.Patterns;
-import android.view.View;
 
 import com.example.android.hindutemple.R;
 
@@ -54,10 +53,9 @@ public class Constants {
         if (value.isEmpty()) {
             view.setError(name + " field can not be empty");
             return false;
-        }else {
+        }
             view.setError(null);
             return true;
-        }
     }
 
 }

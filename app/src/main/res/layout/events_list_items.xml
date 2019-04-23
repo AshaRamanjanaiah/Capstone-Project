@@ -10,7 +10,9 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/layout_margin">
+        android:paddingStart="@dimen/layout_margin"
+        android:paddingLeft="@dimen/layout_margin"
+        android:paddingRight="@dimen/layout_margin">
         <TextView
             android:id="@+id/textview_event_name"
             android:layout_width="match_parent"
@@ -30,6 +32,7 @@
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/ic_menu_edit"
         android:layout_toRightOf="@+id/layout_events"
+        android:layout_toEndOf="@+id/layout_events"
         android:contentDescription="@string/edit"/>
 
     <ImageView
@@ -38,7 +41,9 @@
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/ic_menu_delete"
         android:layout_toRightOf="@+id/imageView_edit_event"
+        android:layout_toEndOf="@+id/imageView_edit_event"
         android:layout_marginLeft="@dimen/layout_margin"
+        android:layout_marginStart="@dimen/layout_margin"
         android:contentDescription="@string/delete"/>
 
     <View

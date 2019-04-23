@@ -10,7 +10,8 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/layout_margin">
+        android:paddingLeft="@dimen/layout_margin"
+        android:paddingRight="@dimen/layout_margin">
         <TextView
             android:id="@+id/textview_day"
             android:layout_width="match_parent"
