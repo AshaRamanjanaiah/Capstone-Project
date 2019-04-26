@@ -1,6 +1,9 @@
 package com.example.android.hindutemple.model;
 
-public class Temples {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Temples implements Parcelable {
 
     private String templeId;
     private String templeName;
@@ -38,4 +41,37 @@ public class Temples {
     public String toString() {
         return templeName;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(templeId);
+        parcel.writeString(templeName);
+        parcel.writeString(templeLocation);
+        parcel.writeString(templeImageUri);
+    }
+
+    private Temples(Parcel in){
+        templeId = in.readString();
+        templeName = in.readString();
+        templeLocation = in.readString();
+        templeImageUri = in.readString();
+    }
+
+    public static final Parcelable.Creator<Temples> CREATOR = new Creator<Temples>() {
+
+        @Override
+        public Temples createFromParcel(Parcel source) {
+            return new Temples(source);
+        }
+
+        @Override
+        public Temples[] newArray(int size) {
+            return new Temples[size];
+        }
+    };
 }

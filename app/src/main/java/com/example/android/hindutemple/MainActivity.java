@@ -7,58 +7,66 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.android.hindutemple.model.Temples;
+import com.example.android.hindutemple.utils.Constants;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import networkutils.FirebaseDatabaseUtils;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TemplesListAdapter.CardviewClickListener {
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
-    private Toolbar toolbar;
     private RecyclerView mTempleListRecyclerView;
     private TemplesListAdapter templesListAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
     private DatabaseReference databaseTemples;
     private DatabaseReference databaseTemplesList;
 
-    private List<Temples> mTemplesList = new ArrayList<>();
+    private ArrayList<Temples> mTemplesList = new ArrayList<>();
+
+    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbar = (Toolbar) findViewById(R.id.app_toolbar);
+        Toolbar toolbar = findViewById(R.id.app_toolbar);
 
         setSupportActionBar(toolbar);
 
-        mTempleListRecyclerView = (RecyclerView) findViewById(R.id.rv_temples_list);
+        mTempleListRecyclerView = findViewById(R.id.rv_temples_list);
 
         // using this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mTempleListRecyclerView.setHasFixedSize(true);
 
         // using a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mTempleListRecyclerView.setLayoutManager(mLayoutManager);
+
+        MobileAds.initialize(this, "ca-app-pub-3601817193499741~3953624780");
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+
+        if(savedInstanceState != null){
+            mTemplesList = savedInstanceState.getParcelableArrayList(Constants.TEMPLES_INFO);
+        }
 
         databaseTemples = FirebaseDatabaseUtils.getDatabase().getReference("temples");
     }
@@ -97,16 +105,19 @@ public class MainActivity extends AppCompatActivity {
 
                     String key = templesSnapshot.getKey();
 
-                    databaseTemplesList = FirebaseDatabaseUtils.getDatabase().getReference("temples").child(key);
+                    if(key != null) {
 
-                    setTempleList();
+                        databaseTemplesList = FirebaseDatabaseUtils.getDatabase().getReference("temples").child(key);
+
+                        setTempleList();
+                    }
 
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.d(TAG, "Failed to load Temples data" );
             }
         });
 
@@ -121,14 +132,35 @@ public class MainActivity extends AppCompatActivity {
                     mTemplesList.add(temple);
                 }
 
-                templesListAdapter = new TemplesListAdapter(mTemplesList);
+                templesListAdapter = new TemplesListAdapter(MainActivity.this, mTemplesList);
                 mTempleListRecyclerView.setAdapter(templesListAdapter);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.d(TAG, "Failed to load Temples List" );
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(Constants.TEMPLES_INFO, mTemplesList);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onCardClicked(int position) {
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        } else {
+            Log.d(TAG, "The interstitial wasn't loaded yet.");
+        }
+        Bundle bundle = new Bundle();
+        Temples templeInfo = mTemplesList.get(position);
+        bundle.putParcelable(Constants.TEMPLES_INFO, templeInfo);
+        Intent intent = new Intent(this, TempleDetailActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

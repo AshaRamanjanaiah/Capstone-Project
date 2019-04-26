@@ -2,7 +2,8 @@
 <resources>
     <color name="colorPrimary">#ff6f00</color>
     <color name="colorPrimaryDark">#c43e00</color>
-    <color name="colorPrimaryLight">#ffa040</color>
+    <color name="colorPrimaryLight">#FFF3E0</color>
     <color name="colorAccent">#689f38</color>
     <color name="viewLineColor">#FFFFFF</color>
+    <color name="bodyTextColor">#6000</color>
 </resources>

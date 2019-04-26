@@ -20,6 +20,8 @@ public class Constants {
                     ".{6,}" +               //at least 6 characters
                     "$");
 
+    public static final String TEMPLES_INFO = "temples_info";
+
     public static boolean validateEmail(TextInputLayout view, String emailInput){
 
         if(emailInput.isEmpty()){

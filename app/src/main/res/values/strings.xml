@@ -3,6 +3,10 @@
     <string name="admin_login">Admin Login</string>
     <string name="add_events">Add Events</string>
 
+    <!-- Temple detail Activity -->
+
+    <string name="temple_detail">Temple Detail</string>
+
     <!-- login Activity -->
     <string name="enter_email">Email</string>
     <string name="enter_password">Password</string>
@@ -35,5 +39,6 @@
     <string name="enter_time">Enter Event Time</string>
     <string name="add_event">Add</string>
     <string name="update_event_date_time">Update Event Date and Time</string>
+    <string name="temple_image">Temple Image</string>
 
 </resources>

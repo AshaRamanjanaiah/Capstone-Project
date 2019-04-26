@@ -10,7 +10,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:parentActivityName=".UpdateTimingsActivity" android:name=".AddAndUpdateEvents"/>
+        <activity android:name=".TempleDetailActivity"></activity>
+        <activity
+            android:name=".AddAndUpdateEvents"
+            android:parentActivityName=".UpdateTimingsActivity" />
         <activity android:name=".UpdateTimingsActivity" />
         <activity android:name=".AdminLoginActivity" />
         <activity android:name=".MainActivity">
@@ -21,6 +24,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3601817193499741~3953624780"/>
     </application>
 
 </manifest>
