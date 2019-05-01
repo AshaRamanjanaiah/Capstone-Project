@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -49,6 +50,7 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
     private TextInputLayout mTextInputLayoutOpenTime;
     private TextInputLayout mTextInputLayoutCloseTime;
     private RecyclerView mRecyclerviewTimingsList;
+    private Toolbar mToolbar;
 
     private DatabaseReference databaseTimings;
     private DatabaseReference databaseTemples;
@@ -66,15 +68,12 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_timings);
 
-        /*if(savedInstanceState == null){
-            firebaseDatabase = FirebaseDatabase.getInstance();
-            firebaseDatabase.setPersistenceEnabled(true);
-        }*/
-
         Spinner mSpinnerDisplayTemples = findViewById(R.id.spinner_templelist);
         mTextInputLayoutDay = findViewById(R.id.editText_day);
         mTextInputLayoutOpenTime = findViewById(R.id.editText_open_time);
         mTextInputLayoutCloseTime = findViewById(R.id.editText_close_time);
+        mToolbar = findViewById(R.id.admin_toolbar);
+        setSupportActionBar(mToolbar);
 
         mRecyclerviewTimingsList = findViewById(R.id.recyclerview_timings);
         mRecyclerviewTimingsList.setHasFixedSize(true);

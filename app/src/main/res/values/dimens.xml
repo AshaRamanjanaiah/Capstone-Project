@@ -15,9 +15,11 @@
     <dimen name="layout_margin">16dp</dimen>
     <dimen name="title_textsize">24dp</dimen>
     <dimen name="title_paddingBottom">10dp</dimen>
-    <dimen name="divider_line_height">2dp</dimen>
+    <dimen name="divider_line_height">1dp</dimen>
     <dimen name="rv_margin">5dp</dimen>
     <dimen name="temple_list_padding">4dp</dimen>
     <dimen name="temple_list_paddingBottom">10dp</dimen>
+    <dimen name="temple_timings_layout_toppadding">30dp</dimen>
+    <dimen name="subtitle_padding_bottom">9dp</dimen>
 
 </resources>

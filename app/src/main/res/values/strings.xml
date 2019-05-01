@@ -18,6 +18,7 @@
     <string name="enter_closing_time">Enter Closing Time</string>
     <string name="update_temple_time">Update</string>
     <string name="update_timings">Update Timings</string>
+    <string name="add_timings">Add Timings</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="update_day_and_time">Update Day and Time</string>
@@ -40,5 +41,11 @@
     <string name="add_event">Add</string>
     <string name="update_event_date_time">Update Event Date and Time</string>
     <string name="temple_image">Temple Image</string>
+    <string name="temple_timings">Temple Timings</string>
+    <string name="temple_events">Temple Events</string>
+    <string name="app_chooser">App chooser</string>
+    
+    <!-- Google Maps key -->
+    <string name="google_maps_key" translatable="false">AIzaSyDO6N22C-Dss_Ix-Nr8cHpw6AV9Y54Xmr4</string>
 
 </resources>

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +52,7 @@ public class AddAndUpdateEvents extends AppCompatActivity implements AdapterView
     private TextInputLayout mInputTime;
     private TextInputLayout mTextInputLayoutEventName;
     private RecyclerView mRecyclerviewEventsList;
+    private Toolbar mToolbar;
 
     private DatabaseReference databaseEvents;
     private DatabaseReference databaseTemples;
@@ -73,6 +75,9 @@ public class AddAndUpdateEvents extends AppCompatActivity implements AdapterView
         mUser = mAuth.getCurrentUser();
 
         databaseTemples = FirebaseDatabaseUtils.getDatabase().getReference("temples").child(mUser.getUid());
+
+        mToolbar = findViewById(R.id.event_toolbar);
+        setSupportActionBar(mToolbar);
 
         mInputStartDate = findViewById(R.id.editText_event_date);
         mInputTime = findViewById(R.id.editText_event_time);

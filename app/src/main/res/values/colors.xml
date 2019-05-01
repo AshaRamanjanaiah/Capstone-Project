@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#c43e00</color>
     <color name="colorPrimaryLight">#FFF3E0</color>
     <color name="colorAccent">#689f38</color>
-    <color name="viewLineColor">#FFFFFF</color>
+    <color name="viewLineColor">#ABB2B9</color>
     <color name="bodyTextColor">#6000</color>
+    <color name="grey">@color/colorPrimary</color>
 </resources>

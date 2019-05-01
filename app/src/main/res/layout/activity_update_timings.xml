@@ -10,13 +10,23 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="@dimen/layout_margin">
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/admin_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:layout_collapseMode="pin"
+            android:background="@color/colorPrimary"
+            app:titleTextColor="@android:color/white"
+            app:title="@string/add_timings" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_margin="@dimen/layout_margin">
 
             <Spinner
                 android:id="@+id/spinner_templelist"
@@ -75,14 +85,16 @@
             android:text="@string/update_temple_time"
             android:background="@color/colorAccent"
             android:textColor="@android:color/white"
-            android:onClick="saveTimings"/>
+            android:onClick="saveTimings"
+            android:layout_margin="@dimen/layout_margin"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview_timings"
             android:scrollbars="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="20dp"
+            android:layout_margin="@dimen/layout_margin"/>
     </LinearLayout>
 
 

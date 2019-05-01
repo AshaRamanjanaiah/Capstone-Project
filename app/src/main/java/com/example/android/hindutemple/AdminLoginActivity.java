@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ public class AdminLoginActivity extends AppCompatActivity {
     private TextInputLayout textInputPassword;
     private TextView textViewDisplayError;
     private ProgressBar progressBarLogin;
+    private Toolbar mToolbar;
 
     private FirebaseAuth mAuth;
 
@@ -35,6 +37,9 @@ public class AdminLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_login);
 
+
+        mToolbar = findViewById(R.id.admin_login_toolbar);
+        setSupportActionBar(mToolbar);
         textInputEmail = findViewById(R.id.text_input_email);
         textInputPassword = findViewById(R.id.text_input_password);
         textViewDisplayError = findViewById(R.id.textView_display_error);
