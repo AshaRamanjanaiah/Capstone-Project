@@ -9,6 +9,14 @@ import java.util.regex.Pattern;
 
 public class Constants {
 
+    public static final String FIRST_VISITED_TEMPLE_ID = "first_visited_temple_id";
+    public static  final String LAST_VISITED_TEMPLE_ID = "last_visited_temple_id";
+    public static final String FIRST_VISITED_TEMPLE_NAME = "first_visited_temple_name";
+    public static final String LAST_VISITED_TEMPLE_NAME = "last_visited_temple_name";
+    public static final String TEMPLE_ID = "temple_id";
+    public static final String EVENT_ID = "event_id";
+
+
     public static final Pattern PASSWORD_PATTERN =
             Pattern.compile("^" +
                     //"(?=.*[0-9])" +         //at least 1 digit

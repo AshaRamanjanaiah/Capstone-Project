@@ -60,7 +60,7 @@ public class TimingsAdapter extends RecyclerView.Adapter<TimingsAdapter.TimingsV
         ImageView imageViewEdit;
         ImageView imageViewDelete;
 
-        public TimingsViewHolder(@NonNull View itemView) {
+        TimingsViewHolder(@NonNull View itemView) {
             super(itemView);
 
             textViewDay = itemView.findViewById(R.id.textview_day);
@@ -73,14 +73,16 @@ public class TimingsAdapter extends RecyclerView.Adapter<TimingsAdapter.TimingsV
 
         }
 
-        public void bind(int position){
+        void bind(int position){
             String day = timingsList.get(position).getTimingsDay();
             textViewDay.setText(day);
 
             String openTime = timingsList.get(position).getTimingsOpen();
             String closeTime = timingsList.get(position).getTimingsClose();
 
-            textViewOpenandCloseTime.setText(openTime+" - "+closeTime);
+            String openAndCloseTime = openTime+" - "+closeTime;
+
+            textViewOpenandCloseTime.setText(openAndCloseTime);
 
         }
 

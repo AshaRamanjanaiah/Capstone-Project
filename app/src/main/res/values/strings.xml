@@ -3,9 +3,6 @@
     <string name="admin_login">Admin Login</string>
     <string name="add_events">Add Events</string>
 
-    <!-- Temple detail Activity -->
-
-    <string name="temple_detail">Temple Detail</string>
 
     <!-- login Activity -->
     <string name="enter_email">Email</string>
@@ -17,21 +14,16 @@
     <string name="enter_opening_time">Enter Opening Time</string>
     <string name="enter_closing_time">Enter Closing Time</string>
     <string name="update_temple_time">Update</string>
-    <string name="update_timings">Update Timings</string>
     <string name="add_timings">Add Timings</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="update_day_and_time">Update Day and Time</string>
     <string name="cancel">Cancel</string>
     <string name="delete_message">Delete this item?</string>
-    <string name="day">Day</string>
-    <string name="open_time">Open Time</string>
-    <string name="close_time">Close Time</string>
     <string name="email_field_cant_be_empty">Email field can not be empty</string>
     <string name="enter_valid_email">Enter a valid Email address</string>
     <string name="password_can_not_be_empty">"Password field can not be empty"</string>
     <string name="password_should_contain_6_chars">Password should contain atleast 6 characters</string>
-    <string name="field_can_not_be_empty">field can not be empty</string>
 
     <!-- Add and Update events Activity -->
 
@@ -40,12 +32,13 @@
     <string name="enter_time">Enter Event Time</string>
     <string name="add_event">Add</string>
     <string name="update_event_date_time">Update Event Date and Time</string>
-    <string name="temple_image">Temple Image</string>
+    <string name="view_temple_image">Temple Image</string>
     <string name="temple_timings">Temple Timings</string>
     <string name="temple_events">Temple Events</string>
     <string name="app_chooser">App chooser</string>
-    
+
     <!-- Google Maps key -->
     <string name="google_maps_key" translatable="false">AIzaSyDO6N22C-Dss_Ix-Nr8cHpw6AV9Y54Xmr4</string>
+    <string name="appwidget_text">EXAMPLE</string>
 
 </resources>

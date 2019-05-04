@@ -25,7 +25,6 @@ public class AdminLoginActivity extends AppCompatActivity {
     private TextInputLayout textInputPassword;
     private TextView textViewDisplayError;
     private ProgressBar progressBarLogin;
-    private Toolbar mToolbar;
 
     private FirebaseAuth mAuth;
 
@@ -38,7 +37,7 @@ public class AdminLoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin_login);
 
 
-        mToolbar = findViewById(R.id.admin_login_toolbar);
+        Toolbar mToolbar = findViewById(R.id.admin_login_toolbar);
         setSupportActionBar(mToolbar);
         textInputEmail = findViewById(R.id.text_input_email);
         textInputPassword = findViewById(R.id.text_input_password);
@@ -51,6 +50,10 @@ public class AdminLoginActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        if(textInputEmail.getEditText() == null || textInputEmail.getEditText().getText() == null ||
+                textInputPassword.getEditText() == null || textInputPassword.getEditText().getText() == null){
+            return;
+        }
         emailInput = textInputEmail.getEditText().getText().toString().trim();
         passwordInput = textInputPassword.getEditText().getText().toString().trim();
         outState.putString(EMAIL_ADDRESS, emailInput);
@@ -60,11 +63,18 @@ public class AdminLoginActivity extends AppCompatActivity {
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        if(textInputEmail.getEditText() == null || textInputPassword.getEditText() == null ){
+            return;
+        }
             textInputEmail.getEditText().setText(savedInstanceState.getString(EMAIL_ADDRESS));
             textInputPassword.getEditText().setText(savedInstanceState.getString(PASSWORD));
     }
 
     public void loginUser(View view) {
+        if(textInputEmail.getEditText() == null || textInputEmail.getEditText().getText() == null ||
+                textInputPassword.getEditText() == null || textInputPassword.getEditText().getText() == null){
+            return;
+        }
         emailInput = textInputEmail.getEditText().getText().toString().trim();
         passwordInput = textInputPassword.getEditText().getText().toString().trim();
         if(!Constants.validateEmail(textInputEmail, emailInput) | !Constants.validatePassword(textInputPassword, passwordInput)){
@@ -81,7 +91,7 @@ public class AdminLoginActivity extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }else{
-                    if(!task.getException().getMessage().isEmpty()) {
+                    if(task.getException() != null && !task.getException().getMessage().isEmpty()){
                         textViewDisplayError.setVisibility(View.VISIBLE);
                         textViewDisplayError.setText(task.getException().getMessage());
                     }

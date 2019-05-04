@@ -28,7 +28,7 @@ import networkutils.FirebaseDatabaseUtils;
 
 public class MainActivity extends AppCompatActivity implements TemplesListAdapter.CardviewClickListener {
 
-    public static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private RecyclerView mTempleListRecyclerView;
     private TemplesListAdapter templesListAdapter;
@@ -132,6 +132,10 @@ public class MainActivity extends AppCompatActivity implements TemplesListAdapte
                     mTemplesList.add(temple);
                 }
 
+                SaveTempleAsyncTask saveTempleAsyncTask =
+                        new SaveTempleAsyncTask(getApplicationContext(),  false);
+                saveTempleAsyncTask.execute(mTemplesList.get(0));
+
                 templesListAdapter = new TemplesListAdapter(MainActivity.this, mTemplesList);
                 mTempleListRecyclerView.setAdapter(templesListAdapter);
             }
@@ -156,6 +160,9 @@ public class MainActivity extends AppCompatActivity implements TemplesListAdapte
         } else {
             Log.d(TAG, "The interstitial wasn't loaded yet.");
         }
+
+        new SaveTempleAsyncTask(getApplicationContext(), true).execute(mTemplesList.get(position));
+
         Bundle bundle = new Bundle();
         Temples templeInfo = mTemplesList.get(position);
         bundle.putParcelable(Constants.TEMPLES_INFO, templeInfo);

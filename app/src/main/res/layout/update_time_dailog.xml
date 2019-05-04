@@ -8,45 +8,52 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/enter_day"
-        android:id="@+id/dailog_update_day" />
+        android:inputType="text"
+        android:id="@+id/dailog_update_day"
+        android:importantForAutofill="no"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/enter_opening_time"
+        android:inputType="text"
         android:id="@+id/dailog_update_opntime"
-        android:layout_below="@+id/dailog_update_day"/>
+        android:layout_below="@+id/dailog_update_day"
+        android:importantForAutofill="no"/>
 
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/enter_closing_time"
+        android:inputType="text"
         android:id="@+id/dailog_update_clstime"
-        android:layout_below="@+id/dailog_update_opntime"/>
+        android:layout_below="@+id/dailog_update_opntime"
+        android:importantForAutofill="no"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/dailog_update_clstime">
-
-    <Button
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:id="@+id/dailog_update_button"
         android:layout_below="@+id/dailog_update_clstime"
-        android:text="@string/update_temple_time"/>
+        style="?android:attr/buttonBarStyle">
 
-    <Button
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:id="@+id/dailog_update_cancel"
-        android:layout_below="@+id/dailog_update_clstime"
-        android:layout_toRightOf="@+id/dailog_update_button"
-        android:text="@string/cancel"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/dailog_update_cancel"
+            android:text="@string/cancel"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/dailog_update_button"
+            android:text="@string/update_temple_time"
+            style="?android:attr/buttonBarButtonStyle"/>
+
     </LinearLayout>
 
 </RelativeLayout>

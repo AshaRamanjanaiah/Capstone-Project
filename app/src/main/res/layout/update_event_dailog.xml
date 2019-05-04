@@ -8,45 +8,52 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/enter_event"
-        android:id="@+id/update_event_name" />
+        android:inputType="text"
+        android:id="@+id/update_event_name"
+        android:importantForAutofill="no"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/enter_start_date"
+        android:inputType="date"
         android:id="@+id/update_event_date"
-        android:layout_below="@+id/update_event_name"/>
+        android:layout_below="@+id/update_event_name"
+        android:importantForAutofill="no"/>
 
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/enter_time"
+        android:inputType="datetime"
         android:id="@+id/update_event_time"
-        android:layout_below="@+id/update_event_date"/>
+        android:layout_below="@+id/update_event_date"
+        android:importantForAutofill="no"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/update_event_time">
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/button_update"
-            android:layout_below="@+id/update_event_time"
-            android:text="@string/update_temple_time"/>
+        android:layout_below="@+id/update_event_time"
+        style="?android:attr/buttonBarStyle">
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/button_cancel"
-            android:layout_below="@+id/update_event_time"
-            android:layout_toRightOf="@+id/button_update"
-            android:text="@string/cancel"/>
+            android:text="@string/cancel"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/button_update"
+            android:text="@string/update_temple_time"
+            style="?android:attr/buttonBarButtonStyle"/>
+
     </LinearLayout>
 
 </RelativeLayout>

@@ -60,7 +60,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsView
         ImageView imageViewEdit;
         ImageView imageViewDelete;
 
-        public EventsViewHolder(@NonNull View itemView) {
+        EventsViewHolder(@NonNull View itemView) {
             super(itemView);
 
             textViewEventName = itemView.findViewById(R.id.textview_event_name);
@@ -73,14 +73,16 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsView
         }
 
 
-        public void bind(int position){
+        void bind(int position){
             String name = eventsList.get(position).getEventName();
             textViewEventName.setText(name);
 
             String eventdate = eventsList.get(position).getEventDate();
             String eventTime = eventsList.get(position).getEventTime();
 
-            textViewEventDateAndTime.setText("On" +eventdate+" from "+eventTime);
+            String dateAndTime = "On" +eventdate+" from "+eventTime;
+
+            textViewEventDateAndTime.setText(dateAndTime);
 
         }
 

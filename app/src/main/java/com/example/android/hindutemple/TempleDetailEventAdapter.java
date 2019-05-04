@@ -50,14 +50,14 @@ public class TempleDetailEventAdapter extends RecyclerView.Adapter<TempleDetailE
         TextView textViewEventName;
         TextView textViewDateAndTime;
 
-        public TempleDetailEventsViewHolder(@NonNull View itemView) {
+        TempleDetailEventsViewHolder(@NonNull View itemView) {
             super(itemView);
 
             textViewEventName = itemView.findViewById(R.id.textview_detail_event_name);
             textViewDateAndTime = itemView.findViewById(R.id.textview_detail_date_and_time);
         }
 
-        public void bind(int position){
+        void bind(int position){
             String eventName = eventsList.get(position).getEventName();
             textViewEventName.setText(eventName);
 

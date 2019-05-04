@@ -2,6 +2,7 @@ package com.example.android.hindutemple.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 public class Temples implements Parcelable {
 
@@ -38,6 +39,7 @@ public class Temples implements Parcelable {
     }
 
     @Override
+    @NonNull
     public String toString() {
         return templeName;
     }

@@ -22,7 +22,6 @@
             android:id="@+id/textview_event_date_and_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textview_day"
             android:textColor="@android:color/white"/>
     </LinearLayout>
 

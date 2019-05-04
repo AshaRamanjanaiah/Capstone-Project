@@ -30,7 +30,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -50,12 +49,8 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
     private TextInputLayout mTextInputLayoutOpenTime;
     private TextInputLayout mTextInputLayoutCloseTime;
     private RecyclerView mRecyclerviewTimingsList;
-    private Toolbar mToolbar;
 
     private DatabaseReference databaseTimings;
-    private DatabaseReference databaseTemples;
-    private FirebaseAuth mAuth;
-    private FirebaseUser mUser;
     private String mTempleId;
 
     private List<Temples> templeList = new ArrayList<>();
@@ -72,7 +67,7 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
         mTextInputLayoutDay = findViewById(R.id.editText_day);
         mTextInputLayoutOpenTime = findViewById(R.id.editText_open_time);
         mTextInputLayoutCloseTime = findViewById(R.id.editText_close_time);
-        mToolbar = findViewById(R.id.admin_toolbar);
+        Toolbar mToolbar = findViewById(R.id.admin_toolbar);
         setSupportActionBar(mToolbar);
 
         mRecyclerviewTimingsList = findViewById(R.id.recyclerview_timings);
@@ -82,10 +77,14 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
         mRecyclerviewTimingsList.setLayoutManager(layoutManager);
         mRecyclerviewTimingsList.setNestedScrollingEnabled(false);
 
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser mUser = mAuth.getCurrentUser();
 
-        databaseTemples = FirebaseDatabaseUtils.getDatabase().getReference("temples").child(mUser.getUid());
+        if(mUser == null || mUser.getUid().isEmpty()){
+            return;
+        }
+
+        DatabaseReference databaseTemples = FirebaseDatabaseUtils.getDatabase().getReference("temples").child(mUser.getUid());
 
         adapter =  new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, templeList);
@@ -172,6 +171,12 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
     }
 
     public void saveTimings(View view){
+
+        if(mTextInputLayoutDay.getEditText() == null || mTextInputLayoutDay.getEditText().getText() == null
+                || mTextInputLayoutOpenTime.getEditText() == null || mTextInputLayoutOpenTime.getEditText().getText() == null
+                || mTextInputLayoutCloseTime.getEditText()  == null || mTextInputLayoutCloseTime.getEditText().getText() == null ){
+            return;
+        }
 
         String day = mTextInputLayoutDay.getEditText().getText().toString().trim();
         String openingTime = mTextInputLayoutOpenTime.getEditText().getText().toString().trim();
@@ -292,6 +297,12 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
+        if(mTextInputLayoutDay.getEditText() == null || mTextInputLayoutDay.getEditText().getText() == null
+                || mTextInputLayoutOpenTime.getEditText() == null || mTextInputLayoutOpenTime.getEditText().getText() == null
+                || mTextInputLayoutCloseTime.getEditText()  == null || mTextInputLayoutCloseTime.getEditText().getText() == null ){
+            return;
+        }
+
         String day = mTextInputLayoutDay.getEditText().getText().toString().trim();
         String openingTime = mTextInputLayoutOpenTime.getEditText().getText().toString().trim();
         String closingTime = mTextInputLayoutCloseTime.getEditText().getText().toString().trim();
@@ -304,6 +315,10 @@ public class UpdateTimingsActivity extends AppCompatActivity implements AdapterV
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        if(mTextInputLayoutDay.getEditText() == null || mTextInputLayoutOpenTime.getEditText() == null
+                ||  mTextInputLayoutCloseTime.getEditText()  == null ){
+            return;
+        }
         mTextInputLayoutDay.getEditText().setText(savedInstanceState.getString(DAY));
         mTextInputLayoutOpenTime.getEditText().setText(savedInstanceState.getString(OPENING_TIME));
         mTextInputLayoutCloseTime.getEditText().setText(savedInstanceState.getString(CLOSING_TIME));

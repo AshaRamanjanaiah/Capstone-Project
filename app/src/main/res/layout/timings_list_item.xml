@@ -21,7 +21,6 @@
             android:id="@+id/textview_open_close_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textview_day"
             android:textColor="@android:color/white"/>
     </LinearLayout>
 
@@ -31,6 +30,7 @@
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/ic_menu_edit"
         android:layout_toRightOf="@+id/layout_timings"
+        android:layout_toEndOf="@+id/layout_timings"
         android:contentDescription="@string/edit"/>
 
     <ImageView
@@ -39,7 +39,9 @@
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/ic_menu_delete"
         android:layout_toRightOf="@+id/imageView_edit"
+        android:layout_toEndOf="@+id/imageView_edit"
         android:layout_marginLeft="@dimen/layout_margin"
+        android:layout_marginStart="@dimen/layout_margin"
         android:contentDescription="@string/delete"/>
 
     <View

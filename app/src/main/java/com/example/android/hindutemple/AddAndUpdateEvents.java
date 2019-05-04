@@ -30,7 +30,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -52,12 +51,9 @@ public class AddAndUpdateEvents extends AppCompatActivity implements AdapterView
     private TextInputLayout mInputTime;
     private TextInputLayout mTextInputLayoutEventName;
     private RecyclerView mRecyclerviewEventsList;
-    private Toolbar mToolbar;
 
     private DatabaseReference databaseEvents;
     private DatabaseReference databaseTemples;
-    private FirebaseAuth mAuth;
-    private FirebaseUser mUser;
     private String mTempleId;
 
     private List<Temples> templeList = new ArrayList<>();
@@ -71,12 +67,16 @@ public class AddAndUpdateEvents extends AppCompatActivity implements AdapterView
         setContentView(R.layout.activity_add_and_update_events);
 
         calendar = Calendar.getInstance();
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser mUser = mAuth.getCurrentUser();
+
+        if(mUser == null || mUser.getUid().isEmpty()){
+            return;
+        }
 
         databaseTemples = FirebaseDatabaseUtils.getDatabase().getReference("temples").child(mUser.getUid());
 
-        mToolbar = findViewById(R.id.event_toolbar);
+        Toolbar mToolbar = findViewById(R.id.event_toolbar);
         setSupportActionBar(mToolbar);
 
         mInputStartDate = findViewById(R.id.editText_event_date);
@@ -154,20 +154,37 @@ public class AddAndUpdateEvents extends AppCompatActivity implements AdapterView
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
 
+                        if(hourOfDay == 0 || minute == 0){
+                            return;
+                        }
+
                         String format =  ((hourOfDay > 12) ? hourOfDay % 12 : hourOfDay) + ":" + (minute < 10 ? ("0" + minute) : minute) + " " + ((hourOfDay >= 12) ? "PM" : "AM");
 
-                        mInputTime.getEditText().setText(format);
+                        if(mInputTime.getEditText() != null){
+                            mInputTime.getEditText().setText(format);
+                        }
+
                     }
                 }, hour, minute, false);
         timePickerDialog.show();
     }
 
     private void showDate(int year, int month, int day) {
-        mInputStartDate.getEditText().setText(new StringBuilder().append(day).append("/")
-                .append(month).append("/").append(year));
+        if(mInputStartDate.getEditText() != null){
+            mInputStartDate.getEditText().setText(new StringBuilder().append(day).append("/")
+                    .append(month).append("/").append(year));
+        }
     }
 
     public void saveEvents(View view) {
+
+        if( mTextInputLayoutEventName.getEditText() == null ||
+                mTextInputLayoutEventName.getEditText().getText() == null ||
+                mInputStartDate.getEditText() == null || mInputStartDate.getEditText().getText() == null
+                || mInputTime.getEditText() == null || mInputTime.getEditText().getText() == null ){
+            return;
+        }
+
         String eventName = mTextInputLayoutEventName.getEditText().getText().toString().trim();
         String eventDate = mInputStartDate.getEditText().getText().toString().trim();
         String eventTime = mInputTime.getEditText().getText().toString().trim();

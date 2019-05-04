@@ -38,36 +38,28 @@ import networkutils.FirebaseDatabaseUtils;
 
 public class TempleDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    public static final String TAG = TempleDetailActivity.class.getSimpleName();
-
-    private Toolbar mTopToolbar;
+    private static final String TAG = TempleDetailActivity.class.getSimpleName();
 
     private Temples templeInfo;
-    private ImageView mBackgroundImageView;
     private RecyclerView mTimingsRecyclerView;
     private RecyclerView mEventsRecyclerView;
 
-    private DatabaseReference mDatabaseTimings;
-    private DatabaseReference mDatabaseEvents;
-    private String mTempleId;
     private List<Timings> timingsList = new ArrayList<>();
     private List<Events> eventsList = new ArrayList<>();
 
     private TempleDetailTimeAdapter templeDetailTimeAdapter;
     private TempleDetailEventAdapter mTempleDetailEventAdapter;
 
-    private GoogleMap mMap;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temple_detail);
 
-        mTopToolbar = findViewById(R.id.main_toolbar);
+        Toolbar mTopToolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(mTopToolbar);
 
         CollapsingToolbarLayout mCollapsingToolbarLayout = findViewById(R.id.main_collapsing_layout);
-        mBackgroundImageView = findViewById(R.id.iv_main_backdrop);
+        ImageView mBackgroundImageView = findViewById(R.id.iv_main_backdrop);
         mTimingsRecyclerView = findViewById(R.id.rv_templedetail_timings);
         mEventsRecyclerView = findViewById(R.id.rv_templedetail_events);
 
@@ -83,7 +75,9 @@ public class TempleDetailActivity extends AppCompatActivity implements OnMapRead
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        if(mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
 
         templeInfo = getIntent().getParcelableExtra(Constants.TEMPLES_INFO);
 
@@ -95,9 +89,9 @@ public class TempleDetailActivity extends AppCompatActivity implements OnMapRead
                     .error(R.drawable.temple_image)
                     .into(mBackgroundImageView);
 
-            mTempleId = templeInfo.getTempleId();
-            mDatabaseTimings = FirebaseDatabaseUtils.getDatabase().getReference("timings").child(mTempleId);
-            mDatabaseEvents = FirebaseDatabaseUtils.getDatabase().getReference("events").child(mTempleId);
+            String mTempleId = templeInfo.getTempleId();
+            DatabaseReference mDatabaseTimings = FirebaseDatabaseUtils.getDatabase().getReference("timings").child(mTempleId);
+            DatabaseReference mDatabaseEvents = FirebaseDatabaseUtils.getDatabase().getReference("events").child(mTempleId);
 
 
             mDatabaseTimings.addValueEventListener(new ValueEventListener() {
@@ -170,12 +164,11 @@ public class TempleDetailActivity extends AppCompatActivity implements OnMapRead
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
 
         // Add a marker in Sydney, Australia, and move the camera.
         LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     public void shareTempleDetails(View view) {

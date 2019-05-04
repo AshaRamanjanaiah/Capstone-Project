@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:scaleType="centerCrop"
-                android:contentDescription="@string/temple_image"/>
+                android:contentDescription="@string/view_temple_image"/>
 
             <TextView
                 android:id="@+id/tv_temple_name"

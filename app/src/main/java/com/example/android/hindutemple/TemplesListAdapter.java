@@ -1,6 +1,5 @@
 package com.example.android.hindutemple;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,7 +17,7 @@ import java.util.List;
 
 public class TemplesListAdapter extends RecyclerView.Adapter<TemplesListAdapter.TemplesListViewHolder> {
 
-    public static final String TAG = TemplesListAdapter.class.getSimpleName();
+    private static final String TAG = TemplesListAdapter.class.getSimpleName();
     private CardviewClickListener cardviewClickListener;
 
     private List<Temples> templesList = new ArrayList<>();
@@ -57,18 +56,16 @@ public class TemplesListAdapter extends RecyclerView.Adapter<TemplesListAdapter.
             TextView textViewTemple;
             ImageView templeImageView;
             TextView textViewTempleLocation;
-            View parentView;
 
-        public TemplesListViewHolder(@NonNull View itemView) {
+        TemplesListViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            textViewTemple = (TextView) itemView.findViewById(R.id.tv_temple_name);
-            templeImageView = (ImageView) itemView.findViewById(R.id.imageview_temple);
-            textViewTempleLocation = (TextView) itemView.findViewById(R.id.tv_temple_location);
-            parentView = itemView;
+            textViewTemple = itemView.findViewById(R.id.tv_temple_name);
+            templeImageView = itemView.findViewById(R.id.imageview_temple);
+            textViewTempleLocation = itemView.findViewById(R.id.tv_temple_location);
         }
 
-        public void bind(final int i) {
+        void bind(final int i) {
             textViewTemple.setText(templesList.get(i).getTempleName());
             textViewTempleLocation.setText(templesList.get(i).getTempleLocation());
             try {

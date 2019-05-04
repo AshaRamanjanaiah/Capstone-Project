@@ -50,21 +50,23 @@ public class TempleDetailTimeAdapter  extends RecyclerView.Adapter<TempleDetailT
         TextView textViewDay;
         TextView textViewOpenandCloseTime;
 
-        public TempleDetailTimingsViewHolder(@NonNull View itemView) {
+        TempleDetailTimingsViewHolder(@NonNull View itemView) {
             super(itemView);
 
             textViewDay = itemView.findViewById(R.id.textview_detail_day);
             textViewOpenandCloseTime = itemView.findViewById(R.id.textview_detail_open_close_time);
         }
 
-        public void bind(int position){
+        void bind(int position){
             String day = timingsList.get(position).getTimingsDay();
             textViewDay.setText(day);
 
             String openTime = timingsList.get(position).getTimingsOpen();
             String closeTime = timingsList.get(position).getTimingsClose();
 
-            textViewOpenandCloseTime.setText(openTime+" - "+closeTime);
+            String openAndCloseTime = openTime+" - "+closeTime;
+
+            textViewOpenandCloseTime.setText(openAndCloseTime);
 
         }
 
