@@ -30,8 +30,7 @@
                 android:scaleType="centerCrop"
                 android:fitsSystemWindows="true"
                 android:contentDescription="@string/view_temple_image"
-                app:layout_collapseMode="parallax"
-                />
+                app:layout_collapseMode="parallax" />
             <android.support.v7.widget.Toolbar
                 android:id="@+id/main_toolbar"
                 android:layout_width="match_parent"

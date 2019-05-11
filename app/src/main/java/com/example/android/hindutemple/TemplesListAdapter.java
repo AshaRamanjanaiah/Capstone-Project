@@ -1,6 +1,7 @@
 package com.example.android.hindutemple;
 
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,7 +29,7 @@ public class TemplesListAdapter extends RecyclerView.Adapter<TemplesListAdapter.
     }
 
     public interface CardviewClickListener{
-        void onCardClicked(int position);
+        void onCardClicked(int position, ImageView templeImage);
     }
 
     @NonNull
@@ -68,6 +69,10 @@ public class TemplesListAdapter extends RecyclerView.Adapter<TemplesListAdapter.
         void bind(final int i) {
             textViewTemple.setText(templesList.get(i).getTempleName());
             textViewTempleLocation.setText(templesList.get(i).getTempleLocation());
+
+            ViewCompat.setTransitionName(templeImageView, "Image Transition"
+                    + templesList.get(i).getTempleId());
+
             try {
                 Picasso.with(itemView.getContext())
                         .load(templesList.get(i).getTempleImageUri())
@@ -81,7 +86,7 @@ public class TemplesListAdapter extends RecyclerView.Adapter<TemplesListAdapter.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    cardviewClickListener.onCardClicked(i);
+                    cardviewClickListener.onCardClicked(i, templeImageView);
                 }
             });
         }

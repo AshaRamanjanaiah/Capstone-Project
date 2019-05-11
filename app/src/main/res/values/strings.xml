@@ -40,5 +40,6 @@
     <!-- Google Maps key -->
     <string name="google_maps_key" translatable="false">AIzaSyDO6N22C-Dss_Ix-Nr8cHpw6AV9Y54Xmr4</string>
     <string name="appwidget_text">EXAMPLE</string>
+    <string name="image_transition" translatable="false">Image Transition</string>
 
 </resources>

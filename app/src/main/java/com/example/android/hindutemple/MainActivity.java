@@ -1,7 +1,9 @@
 package com.example.android.hindutemple;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import com.example.android.hindutemple.model.Temples;
 import com.example.android.hindutemple.utils.Constants;
@@ -154,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements TemplesListAdapte
     }
 
     @Override
-    public void onCardClicked(int position) {
+    public void onCardClicked(int position, ImageView templeImage) {
         if (mInterstitialAd.isLoaded()) {
             mInterstitialAd.show();
         } else {
@@ -168,6 +171,14 @@ public class MainActivity extends AppCompatActivity implements TemplesListAdapte
         bundle.putParcelable(Constants.TEMPLES_INFO, templeInfo);
         Intent intent = new Intent(this, TempleDetailActivity.class);
         intent.putExtras(bundle);
-        startActivity(intent);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            Bundle bundleTransition = ActivityOptions.makeSceneTransitionAnimation(this,
+                    templeImage,
+                    ViewCompat.getTransitionName(templeImage)).toBundle();
+            startActivity(intent, bundleTransition);
+        }else {
+            startActivity(intent);
+        }
     }
 }

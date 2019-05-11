@@ -1,6 +1,7 @@
 package com.example.android.hindutemple;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -60,6 +62,9 @@ public class TempleDetailActivity extends AppCompatActivity implements OnMapRead
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temple_detail);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            supportPostponeEnterTransition();
+        }
 
         setToolbar();
 
@@ -101,7 +106,11 @@ public class TempleDetailActivity extends AppCompatActivity implements OnMapRead
             mTempleImage = getIntent().getExtras().getString(Constants.TEMPLE_IMAGE_URL);
         }
 
-            if(mTempleId == null){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mBackgroundImageView.setTransitionName(getResources().getString(R.string.image_transition)+mTempleId);
+        }
+
+        if(mTempleId == null){
                 return;
             }
             populateData();
@@ -130,7 +139,17 @@ public class TempleDetailActivity extends AppCompatActivity implements OnMapRead
                 .load(mTempleImage)
                 .placeholder(R.drawable.temple_image)
                 .error(R.drawable.temple_image)
-                .into(mBackgroundImageView);
+                .into(mBackgroundImageView, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        supportStartPostponedEnterTransition();
+                    }
+
+                    @Override
+                    public void onError() {
+                        supportStartPostponedEnterTransition();
+                    }
+                });
 
         DatabaseReference mDatabaseTimings = FirebaseDatabaseUtils.getDatabase().getReference("timings").child(mTempleId);
         DatabaseReference mDatabaseEvents = FirebaseDatabaseUtils.getDatabase().getReference("events").child(mTempleId);
