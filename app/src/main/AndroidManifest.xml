@@ -42,7 +42,7 @@
             android:parentActivityName=".UpdateTimingsActivity" />
         <activity android:name=".UpdateTimingsActivity" />
         <activity android:name=".AdminLoginActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />

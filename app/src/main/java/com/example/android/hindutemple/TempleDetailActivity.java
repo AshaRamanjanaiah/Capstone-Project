@@ -222,10 +222,10 @@ public class TempleDetailActivity extends AppCompatActivity implements OnMapRead
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        // Add a marker in Sydney, Australia, and move the camera.
-        LatLng sydney = new LatLng(-34, 151);
-        googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        // Add a marker in Bangalore, India, and move the camera.
+        LatLng banglore = new LatLng(13.0293077, 77.576516);
+        googleMap.addMarker(new MarkerOptions().position(banglore).title("Marker in Bangalore"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(banglore));
     }
 
     public void shareTempleDetails(View view) {
