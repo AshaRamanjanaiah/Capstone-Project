@@ -76,9 +76,7 @@ public class AddAndUpdateEvents extends AppCompatActivity implements AdapterView
 
         databaseTemples = FirebaseDatabaseUtils.getDatabase().getReference("temples").child(mUser.getUid());
 
-        Toolbar mToolbar = findViewById(R.id.event_toolbar);
-        setSupportActionBar(mToolbar);
-
+        setToolbar();
         mInputStartDate = findViewById(R.id.editText_event_date);
         mInputTime = findViewById(R.id.editText_event_time);
         Spinner mSpinnerDisplayTempleEvents = findViewById(R.id.spinner_templelist_events);
@@ -100,6 +98,22 @@ public class AddAndUpdateEvents extends AppCompatActivity implements AdapterView
         
         getTempleList();
 
+    }
+
+    private void setToolbar() {
+        Toolbar mToolbar = findViewById(R.id.event_toolbar);
+        setSupportActionBar(mToolbar);
+
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     private void getTempleList() {
@@ -331,5 +345,34 @@ public class AddAndUpdateEvents extends AppCompatActivity implements AdapterView
         String id = eventsList.get(clickedItemIndex).getEventId();
 
         showDeleteDailog(id);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if(mTextInputLayoutEventName.getEditText() == null || mTextInputLayoutEventName.getEditText().getText() == null
+                || mInputStartDate.getEditText() == null || mInputStartDate.getEditText().getText() == null
+                || mInputTime.getEditText()  == null || mInputTime.getEditText().getText() == null ){
+            return;
+        }
+
+        String eventName = mTextInputLayoutEventName.getEditText().getText().toString().trim();
+        String eventDate = mInputStartDate.getEditText().getText().toString().trim();
+        String eventTime = mInputTime.getEditText().getText().toString().trim();
+
+        outState.putString(EVENT_NAME, eventName);
+        outState.putString(EVENT_DATE, eventDate);
+        outState.putString(EVENT_TIME, eventTime);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        if(mTextInputLayoutEventName.getEditText() == null || mInputStartDate.getEditText() == null
+                ||  mInputTime.getEditText()  == null ){
+            return;
+        }
+        mTextInputLayoutEventName.getEditText().setText(savedInstanceState.getString(EVENT_NAME));
+        mInputStartDate.getEditText().setText(savedInstanceState.getString(EVENT_DATE));
+        mInputTime.getEditText().setText(savedInstanceState.getString(EVENT_TIME));
     }
 }

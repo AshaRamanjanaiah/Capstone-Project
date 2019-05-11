@@ -9,6 +9,11 @@
         <item name="actionOverflowButtonStyle">@style/OverFlow</item>
     </style>
 
+    <style name="ToolbarTheme" parent="AppTheme">
+        <!-- Customize color of back arrow -->
+        <item name="colorControlNormal">@android:color/white</item>
+    </style>
+
     <style name="OverFlow" parent="@style/Widget.AppCompat.Light.ActionButton.Overflow">
         <item name="android:tint">@android:color/white</item>
     </style>

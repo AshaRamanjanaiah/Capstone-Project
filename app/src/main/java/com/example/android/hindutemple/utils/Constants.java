@@ -13,8 +13,12 @@ public class Constants {
     public static  final String LAST_VISITED_TEMPLE_ID = "last_visited_temple_id";
     public static final String FIRST_VISITED_TEMPLE_NAME = "first_visited_temple_name";
     public static final String LAST_VISITED_TEMPLE_NAME = "last_visited_temple_name";
+    public static final String FIRST_VISITED_TEMPLE_IMAGE_URL = "first_visited_temple_url";
+    public static final String LAST_VISITED_TEMPLE_IMAGE_URL = "last_visited_temple_url";
     public static final String TEMPLE_ID = "temple_id";
     public static final String EVENT_ID = "event_id";
+    public static final String TEMPLE_NAME = "temple_name";
+    public static final String TEMPLE_IMAGE_URL = "temple_image_url";
 
 
     public static final Pattern PASSWORD_PATTERN =

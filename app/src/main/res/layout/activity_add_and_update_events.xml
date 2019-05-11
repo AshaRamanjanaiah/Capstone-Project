@@ -20,6 +20,7 @@
             app:layout_collapseMode="pin"
             android:background="@color/colorPrimary"
             app:titleTextColor="@android:color/white"
+            app:theme="@style/ToolbarTheme"
             app:title="@string/add_events" />
 
         <LinearLayout

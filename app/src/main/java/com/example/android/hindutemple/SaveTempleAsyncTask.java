@@ -26,17 +26,21 @@ class SaveTempleAsyncTask extends AsyncTask<Temples, Void, Void> {
 
         String tempIdValue = temples[0].getTempleId();
         String templeNameValue = temples[0].getTempleName();
+        String templeImageURLValue = temples[0].getTempleImageUri();
 
         String templeIdKey = Constants.FIRST_VISITED_TEMPLE_ID;
         String templeNamekey = Constants.FIRST_VISITED_TEMPLE_NAME;
+        String templImageURLkey = Constants.FIRST_VISITED_TEMPLE_IMAGE_URL;
 
         if(cardClicked){
             templeIdKey = Constants.LAST_VISITED_TEMPLE_ID;
             templeNamekey = Constants.LAST_VISITED_TEMPLE_NAME;
+            templImageURLkey = Constants.LAST_VISITED_TEMPLE_IMAGE_URL;
         }
 
         sharedPreferenceUtils.saveToSharedPreference(templeIdKey, tempIdValue);
         sharedPreferenceUtils.saveToSharedPreference(templeNamekey, templeNameValue);
+        sharedPreferenceUtils.saveToSharedPreference(templImageURLkey, templeImageURLValue);
 
         return null;
     }

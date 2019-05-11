@@ -49,17 +49,22 @@ public class TempleDetailActivity extends AppCompatActivity implements OnMapRead
 
     private TempleDetailTimeAdapter templeDetailTimeAdapter;
     private TempleDetailEventAdapter mTempleDetailEventAdapter;
+    private CollapsingToolbarLayout mCollapsingToolbarLayout;
+    private ImageView mBackgroundImageView;
+
+    private String mTempleId = null;
+    private String mTempleName = null;
+    private String mTempleImage = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temple_detail);
 
-        Toolbar mTopToolbar = findViewById(R.id.main_toolbar);
-        setSupportActionBar(mTopToolbar);
+        setToolbar();
 
-        CollapsingToolbarLayout mCollapsingToolbarLayout = findViewById(R.id.main_collapsing_layout);
-        ImageView mBackgroundImageView = findViewById(R.id.iv_main_backdrop);
+        mCollapsingToolbarLayout = findViewById(R.id.main_collapsing_layout);
+        mBackgroundImageView = findViewById(R.id.iv_main_backdrop);
         mTimingsRecyclerView = findViewById(R.id.rv_templedetail_timings);
         mEventsRecyclerView = findViewById(R.id.rv_templedetail_events);
 
@@ -79,65 +84,98 @@ public class TempleDetailActivity extends AppCompatActivity implements OnMapRead
             mapFragment.getMapAsync(this);
         }
 
-        templeInfo = getIntent().getParcelableExtra(Constants.TEMPLES_INFO);
-
-        if(templeInfo != null) {
-            mCollapsingToolbarLayout.setTitle(templeInfo.getTempleName());
-            Picasso.with(this)
-                    .load(templeInfo.getTempleImageUri())
-                    .placeholder(R.drawable.temple_image)
-                    .error(R.drawable.temple_image)
-                    .into(mBackgroundImageView);
-
-            String mTempleId = templeInfo.getTempleId();
-            DatabaseReference mDatabaseTimings = FirebaseDatabaseUtils.getDatabase().getReference("timings").child(mTempleId);
-            DatabaseReference mDatabaseEvents = FirebaseDatabaseUtils.getDatabase().getReference("events").child(mTempleId);
-
-
-            mDatabaseTimings.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    timingsList.clear();
-                    for (DataSnapshot timingsSnapshot: dataSnapshot.getChildren()){
-                        Timings timings = timingsSnapshot.getValue(Timings.class);
-                        timingsList.add(timings);
-                    }
-
-                    templeDetailTimeAdapter = new TempleDetailTimeAdapter(timingsList);
-                    mTimingsRecyclerView.setAdapter(templeDetailTimeAdapter);
-                    templeDetailTimeAdapter.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.d(TAG, "Network error, Could not load timings");
-                }
-            });
-
-
-            mDatabaseEvents.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    eventsList.clear();
-                    for (DataSnapshot eventsSnapshot: dataSnapshot.getChildren()){
-                        Events events = eventsSnapshot.getValue(Events.class);
-                        eventsList.add(events);
-                    }
-
-                    mTempleDetailEventAdapter = new TempleDetailEventAdapter(eventsList);
-                    mEventsRecyclerView.setAdapter(mTempleDetailEventAdapter);
-                    mTempleDetailEventAdapter.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.d(TAG, "Network error, Could not load events");
-                }
-            });
+        if(getIntent().getExtras() == null){
+            return;
         }
 
+        if(getIntent().hasExtra(Constants.TEMPLES_INFO)){
+            templeInfo = getIntent().getParcelableExtra(Constants.TEMPLES_INFO);
+            mTempleId = templeInfo.getTempleId();
+            mTempleName = templeInfo.getTempleName();
+            mTempleImage = templeInfo.getTempleImageUri();
+        }else if(getIntent().getExtras().containsKey(Constants.TEMPLE_ID)
+                && getIntent().getExtras().containsKey(Constants.TEMPLE_NAME) &&
+                getIntent().getExtras().containsKey(Constants.TEMPLE_IMAGE_URL)){
+            mTempleId = getIntent().getStringExtra(Constants.TEMPLE_ID);
+            mTempleName = getIntent().getExtras().getString(Constants.TEMPLE_NAME);
+            mTempleImage = getIntent().getExtras().getString(Constants.TEMPLE_IMAGE_URL);
+        }
+
+            if(mTempleId == null){
+                return;
+            }
+            populateData();
+    }
+
+    private void setToolbar() {
+        Toolbar mTopToolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(mTopToolbar);
+
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    private void populateData() {
+
+        mCollapsingToolbarLayout.setTitle(mTempleName);
+        Picasso.with(this)
+                .load(mTempleImage)
+                .placeholder(R.drawable.temple_image)
+                .error(R.drawable.temple_image)
+                .into(mBackgroundImageView);
+
+        DatabaseReference mDatabaseTimings = FirebaseDatabaseUtils.getDatabase().getReference("timings").child(mTempleId);
+        DatabaseReference mDatabaseEvents = FirebaseDatabaseUtils.getDatabase().getReference("events").child(mTempleId);
 
 
+        mDatabaseTimings.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                timingsList.clear();
+                for (DataSnapshot timingsSnapshot: dataSnapshot.getChildren()){
+                    Timings timings = timingsSnapshot.getValue(Timings.class);
+                    timingsList.add(timings);
+                }
+
+                templeDetailTimeAdapter = new TempleDetailTimeAdapter(timingsList);
+                mTimingsRecyclerView.setAdapter(templeDetailTimeAdapter);
+                templeDetailTimeAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG, "Network error, Could not load timings");
+            }
+        });
+
+
+        mDatabaseEvents.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                eventsList.clear();
+                for (DataSnapshot eventsSnapshot: dataSnapshot.getChildren()){
+                    Events events = eventsSnapshot.getValue(Events.class);
+                    eventsList.add(events);
+                }
+
+                mTempleDetailEventAdapter = new TempleDetailEventAdapter(eventsList);
+                mEventsRecyclerView.setAdapter(mTempleDetailEventAdapter);
+                mTempleDetailEventAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG, "Network error, Could not load events");
+            }
+        });
     }
 
     @Override
@@ -174,8 +212,18 @@ public class TempleDetailActivity extends AppCompatActivity implements OnMapRead
     public void shareTempleDetails(View view) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, templeInfo.getTempleName()+"\n"+templeInfo.getTempleLocation());
+        if(templeInfo != null){
+            sendIntent.putExtra(Intent.EXTRA_TEXT, templeInfo.getTempleName()+"\n"+templeInfo.getTempleLocation());
+        }else {
+            sendIntent.putExtra(Intent.EXTRA_TEXT, mTempleName);
+        }
+
         sendIntent.setType("text/plain");
         startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.app_chooser)));
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 }

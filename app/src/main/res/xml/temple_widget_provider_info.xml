@@ -4,7 +4,7 @@
     android:initialLayout="@layout/temple_widget_provider"
     android:minWidth="150dp"
     android:minHeight="150dp"
-    android:previewImage="@drawable/example_appwidget_preview"
+    android:previewImage="@drawable/mandir_default_image"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="86400000"
     android:widgetCategory="home_screen" />
